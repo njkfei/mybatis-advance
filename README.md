@@ -80,9 +80,35 @@ public class SqlProvider {
         
 		return sql;
 	}
+	
+	// 如果传递的是LIST类型的参数，则必须使用MAP,如下所示
+	public String  insertJifensSql(Map map){
+        List<Jifen> jifens = (List<Jifen>) map.get("list");
+        StringBuffer sb = new StringBuffer();
+
+        sb.append("INSERT INTO `ysyy_user_jifen_bak`( `user_id`, `user_type`, `jf_type`, `jf_par1`, `jf_par2`, `jf_time`, `jf_value`, `jf_total`,`r_id`) ");
+        sb.append("VALUES ");
+
+        for (Jifen jifen:
+            jifens) {
+            sb.append("(");
+            sb.append(jifen.getStrings());
+            sb.append("),");
+        }
+
+        String sql =  sb.substring(0,sb.length()-1).toString();
+
+        logger.info("=====================>" + sql);
+
+        return sql;
+    }
 }
 ```
 
+
+## 关于坑
+自定义注解时，如批处理，则必须使用MAP，否则会报找反射异常。必须按如下操作。
+org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.builder.BuilderException: Error invoking SqlProvider method 
 本项目没有xml配置文件，全部以注解的方式，进行配置注入。
 
 #### 项目参考：[www.websystique.com](http://www.websystique.com)
