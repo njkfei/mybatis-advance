@@ -104,7 +104,13 @@ public class SqlProvider {
     }
 }
 ```
+返回自增主键
 
+```
+	@Insert("insert into user(user_id, user_name) values(#{user_id}, #{user_name})")
+	@Options(useGeneratedKeys = true, keyColumn = "id")
+	int insert2(User user);
+```
 
 ## 关于坑
 自定义注解时，如批处理，则必须使用MAP，否则会报找反射异常。必须按如下操作。
